@@ -44,6 +44,7 @@ class YandexDiskUploader:
         self.dir_name = dir_name
         self.json_file = json_file
         self.token = user_token
+        self.vk = VkGetPhotos(vk_token)
 
     def get_headers(self):
         return {
@@ -76,7 +77,7 @@ class YandexDiskUploader:
         headers = self.get_headers()
         photos_list = []
 
-        for photo in vk.get_photos():
+        for photo in self.vk.get_photos():
             params_get = {
                 'path': self.dir_name + '/' + str(photo['likes']['count']) + '.jpg'
                 }
@@ -96,13 +97,13 @@ class YandexDiskUploader:
             }).json()
 
             res_success = requests.get(res_post['href'], headers=headers).json()
-            print(f"Файл {photo_dict['file_name']} ({len(photos_list) + 1}/{vk.cnt}) загружается на яндекс диск")
+            print(f"Файл {photo_dict['file_name']} ({len(photos_list) + 1}/{self.vk.cnt}) загружается на яндекс диск")
             while res_success['status'] != 'success':
                 time.sleep(2)
                 res_success = requests.get(res_post['href'], headers=headers).json()
                 if res_success['status'] == 'failed':
-                    print(f"При загрузке файла {photo_dict['file_name']} ({len(photos_list) + 1}/{vk.cnt}) на яндекс диск произошла ошибка", '\n')
-            print(f"Файл {photo_dict['file_name']} ({len(photos_list) + 1}/{vk.cnt}) успешно загружен на яндекс диск", '\n')
+                    print(f"При загрузке файла {photo_dict['file_name']} ({len(photos_list) + 1}/{self.vk.cnt}) на яндекс диск произошла ошибка", '\n')
+            print(f"Файл {photo_dict['file_name']} ({len(photos_list) + 1}/{self.vk.cnt}) успешно загружен на яндекс диск", '\n')
 
             photo_dict['size'] = str(photo['sizes'][-1]['width']) + 'x' + str(photo['sizes'][-1]['height']) + "(" + str(photo['sizes'][-1]['type']) + ")"
             photos_list.append(photo_dict)
@@ -137,6 +138,6 @@ class YandexDiskUploader:
 
          
 if __name__ == '__main__':
-    vk = VkGetPhotos('958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008')
+    vk_token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
     yandex = YandexDiskUploader('ВСТАВЬТЕ СЮДА ТОКЕН YANDEX DISK API')
     yandex.upload()
