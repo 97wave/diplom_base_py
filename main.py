@@ -38,7 +38,7 @@ class VkGetPhotos:
 
 
 class YandexDiskUploader:
-    def __init__(self, user_token, dir_name='Upload_Photos', json_file='photos.json'):
+    def __init__(self, user_token, vk_token, dir_name='Upload_Photos', json_file='photos.json'):
         self.url = 'https://cloud-api.yandex.net:443/v1/disk/resources'
         self.upload_url = 'https://cloud-api.yandex.net:443/v1/disk/resources/upload'
         self.dir_name = dir_name
@@ -138,6 +138,5 @@ class YandexDiskUploader:
 
          
 if __name__ == '__main__':
-    vk_token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
-    yandex = YandexDiskUploader('ВСТАВЬТЕ СЮДА ТОКЕН YANDEX DISK API')
+    yandex = YandexDiskUploader('ВСТАВЬТЕ СЮДА ТОКЕН YANDEX DISK API', '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008')
     yandex.upload()
